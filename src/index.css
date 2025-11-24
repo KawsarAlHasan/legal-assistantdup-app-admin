@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for the sidebar */
+.ant-menu {
+  width: 320px !important;
+}
+
+.ant-menu .ant-menu-item-selected {
+  background-color: #ed6a1f !important;
+  color: #ffffff !important;
+}
+
+.ant-menu .ant-menu-item-selected a {
+  color: #ffffff !important;
+}
+
+.ant-menu .ant-menu-item:hover {
+  background-color: #ed6a1f !important;
+  color: #ffffff !important;
+}
+
+.ant-menu .ant-menu-submenu-title:hover {
+  background-color: #ed6a1f !important;
+  color: #ffffff !important;
+}
+
+.ant-menu .ant-menu-item a {
+  color: #002436;
+  font-size: 14px;
+}
+
+.ant-table .ant-table-thead > tr > th::before {
+  display: none !important;
+}
+
+/* For the Settings submenu header */
+.ant-menu .ant-menu-submenu-title {
+  background-color: #2e3f49 !important;
+}
+
+/* For the Settings submenu items */
+.ant-menu .ant-menu-submenu .ant-menu-item {
+  background-color: #2e3f49 !important;
+}
+
+/* Hover state for submenu items */
+.ant-menu .ant-menu-submenu .ant-menu-item:hover {
+  background-color: #ed6a1f !important;
+}
+
+/* Selected state for submenu items */
+.ant-menu .ant-menu-submenu .ant-menu-item-selected {
+  background-color: #ed6a1f !important;
+}
+
+.bgBlack {
+  background-color: #ed6a1f;
+}
+
+.my-main-button {
+  color: #fefefe;
+  background-color: #ed6a1f;
+  border: none;
+}
+
+.my-main-button:hover {
+  background-color: #fd3300 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.mainBG {
+  background-color: #faeee6 !important;
+}
