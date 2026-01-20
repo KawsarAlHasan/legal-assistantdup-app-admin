@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Modal, Form, Input, message } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
-// import { API } from "../api/api";
+import { API } from "../api/api";
 
 const ChangePassword = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,15 +13,19 @@ const ChangePassword = () => {
   const handleFinish = async (values) => {
     try {
       setLoading(true);
-      // const res = await API.post("/change-password/", {
-      //   old_password: values.old_password,
-      //   new_password: values.new_password,
-      //   retype_new_password: values.retype_new_password,
-      // });
+
+      const res = await API.post("/change-password/", {
+        old_password: values.old_password,
+        new_password: values.new_password,
+        re_type_password: values.retype_new_password,
+      });
       message.success("Password changed successfully!");
       setIsModalOpen(false);
     } catch (err) {
-      message.error(err.response?.data?.detail || "Failed to change password");
+      console.log(err, "error");
+      message.error(
+        err?.response?.data?.message || "Failed to change password",
+      );
     } finally {
       setLoading(false);
     }
@@ -56,7 +60,14 @@ const ChangePassword = () => {
           <Form.Item
             label="New Password"
             name="new_password"
-            rules={[{ required: true, message: "Please enter a new password" }]}
+            rules={[
+              { required: true, message: "Password is required." },
+              {
+                pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,
+                message:
+                  "At least 8 chars, 1 uppercase, 1 number & 1 special char",
+              },
+            ]}
           >
             <Input.Password placeholder="Enter your new password" />
           </Form.Item>
@@ -81,7 +92,13 @@ const ChangePassword = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" className="my-main-button" htmlType="submit" loading={loading} block>
+            <Button
+              type="primary"
+              className="my-main-button"
+              htmlType="submit"
+              loading={loading}
+              block
+            >
               Change Password
             </Button>
           </Form.Item>

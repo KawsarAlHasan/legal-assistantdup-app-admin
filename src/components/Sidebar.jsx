@@ -1,23 +1,18 @@
 import { Menu } from "antd";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaUsers } from "react-icons/fa";
 import { MdAdminPanelSettings, MdDashboard } from "react-icons/md";
 import { IoLogOutOutline } from "react-icons/io5";
-
-// import { signOutAdmin, useAdminDashboard } from "../api/api";
-
-const { SubMenu } = Menu;
+import { signOutAdmin } from "../api/api";
+import { useAdmin } from "../context/AdminContext";
 
 const Sidebar = ({ onClick }) => {
   const location = useLocation();
 
-  // const { adminDashboard, isLoading, isError, error, refetch } =
-  //   useAdminDashboard();
+  const { adminProfile, isLoading, isError, error, refetch } = useAdmin();
 
-  const navigate = useNavigate();
   const handleSignOut = () => {
-    // signOutAdmin();
-    navigate("/login");
+    signOutAdmin();
   };
 
   // Determine the selected key based on current route
@@ -30,7 +25,7 @@ const Sidebar = ({ onClick }) => {
     return ["1"];
   };
 
-  const isSuperAdmin = "superadmin";
+  const isSuperAdmin = adminProfile?.user?.role == "SUPER_ADMIN";
 
   const sidebarItems = [
     {
@@ -77,7 +72,7 @@ const Sidebar = ({ onClick }) => {
     {
       key: "logout",
       icon: <IoLogOutOutline className="!text-xl" />,
-      label: <span className="!text-[18px]" >Logout</span>,
+      label: <span className="!text-[18px]">Logout</span>,
       className: "bottom-20",
       onClick: handleSignOut,
       style: {

@@ -10,18 +10,18 @@ import {
   Upload,
   Space,
 } from "antd";
-// import { API } from "../api/api";
+import { API, BASE_URL } from "../api/api";
 
-const AccountSetting = ({ adminProfile }) => {
+const AccountSetting = ({ adminProfile, refetch }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null); 
-  const [imageFile, setImageFile] = useState(null); 
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => {
-    setSelectedImage(null); 
+    setSelectedImage(null);
     setImageFile(null);
     setIsModalOpen(false);
   };
@@ -35,31 +35,32 @@ const AccountSetting = ({ adminProfile }) => {
     };
     reader.readAsDataURL(file);
 
-    return false; 
+    return false;
   };
+
+  console.log(imageFile, "imageFile");
 
   const handleFinish = async (values) => {
     try {
       setLoading(true);
 
-  
       const formData = new FormData();
       formData.append("full_name", values.name);
       formData.append("email", values.email);
-      formData.append("phone_number", values.phone_number);
+      formData.append("mobile_number", values.phone_number);
 
       if (imageFile) {
         formData.append("profile_picture", imageFile);
       }
 
-      // await API.put(`/profile/update/`, formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
+      await API.patch(`/profile/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       message.success("Profile updated successfully!");
-      // refetch();
+      refetch();
 
       setSelectedImage(null);
       setImageFile(null);
@@ -106,7 +107,7 @@ const AccountSetting = ({ adminProfile }) => {
           <div className="relative mb-4">
             <Avatar
               size={100}
-              src={selectedImage || adminProfile?.profile_picture}
+              src={selectedImage || BASE_URL + adminProfile?.profile_picture}
               icon={<UserOutlined />}
               className="border-2 border-gray-200"
             />
@@ -147,10 +148,10 @@ const AccountSetting = ({ adminProfile }) => {
           layout="vertical"
           onFinish={handleFinish}
           initialValues={{
-            name: adminProfile?.name,
+            name: adminProfile?.full_name,
             email: adminProfile?.email,
-            phone_number: adminProfile?.phone_number,
-            role: adminProfile?.role,
+            phone_number: adminProfile?.mobile_number,
+            role: adminProfile?.role == "SUPER_ADMIN" ? "Super Admin" : "Admin",
           }}
         >
           <Form.Item

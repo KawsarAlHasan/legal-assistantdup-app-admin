@@ -9,8 +9,8 @@ import NotFound from "../components/NotFound";
 import UserManagement from "../pages/usersManagement/UserManagement";
 import CheckCode from "../pages/login/CheckCode";
 import Administrators from "../pages/administrators/Administrators";
-import Payments from "../pages/payments/Payments";
-import PrivateRoute from "./PrivateRoute";
+import { AdminProvider } from "../context/AdminContext";
+import Unauthorized from "../components/Unauthorized";
 
 export const router = createBrowserRouter([
   {
@@ -34,8 +34,16 @@ export const router = createBrowserRouter([
     element: <PasswordUpdateLogin />,
   },
   {
+    path: "/unauthorized",
+    element: <Unauthorized />,
+  },
+  {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <AdminProvider>
+        <MainLayout />
+      </AdminProvider>
+    ),
     children: [
       {
         path: "/",
@@ -48,10 +56,6 @@ export const router = createBrowserRouter([
       {
         path: "/administrators",
         element: <Administrators />,
-      },
-      {
-        path: "/payments",
-        element: <Payments />,
       },
     ],
   },

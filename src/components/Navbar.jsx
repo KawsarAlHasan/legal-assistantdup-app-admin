@@ -1,29 +1,17 @@
 import { Avatar, Dropdown, Button, Divider, Tag } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logoImage from "../assets/logo.png";
 import { MenuOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import ChangePassword from "./ChangePassword";
 import AccountSetting from "./AccountSetting";
-import { signOutAdmin, useAdminDashboard } from "../api/api";
+import { BASE_URL, signOutAdmin } from "../api/api";
+import { useAdmin } from "../context/AdminContext";
 
 const Navbar = ({ showDrawer }) => {
-  // const { adminDashboard, isLoading, isError, error, refetch } =
-  //   useAdminDashboard();
-
-  const navigate = useNavigate();
+  const { adminProfile, isLoading, isError, error, refetch } = useAdmin();
 
   const handleSignOut = () => {
     signOutAdmin();
-    navigate("/login");
-  };
-
-  const adminProfile = {
-    name: "The Professor",
-    role: "Super Admin",
-    email: "super@admin.com",
-    phone_number: "1234567890",
-    profile_picture:
-      "https://www.looper.com/img/gallery/why-the-professor-from-money-heist-looks-so-familiar/intro-1587390568.jpg",
   };
 
   const profileMenuItems = [
@@ -34,15 +22,17 @@ const Navbar = ({ showDrawer }) => {
           <div className="flex gap-3 items-start">
             <Avatar
               size={50}
-              src={adminProfile?.profile_picture}
+              src={BASE_URL + adminProfile?.user?.profile_picture}
               icon={<UserOutlined />}
             />
             <div>
               <h1 className="text-[#242424] text-[16px] font-bold mb-1">
-                {adminProfile?.name}
+                {adminProfile?.user?.full_name}
               </h1>
               <Tag color="blue" className="m-0">
-                {adminProfile?.role}
+                {adminProfile?.user?.role == "SUPER_ADMIN"
+                  ? "Super Admin"
+                  : adminProfile?.user?.role}
               </Tag>
             </div>
           </div>
@@ -54,7 +44,9 @@ const Navbar = ({ showDrawer }) => {
     },
     {
       key: "profile",
-      label: <AccountSetting adminProfile={adminProfile} />,
+      label: (
+        <AccountSetting adminProfile={adminProfile?.user} refetch={refetch} />
+      ),
     },
     {
       key: "change-password",
@@ -105,16 +97,18 @@ const Navbar = ({ showDrawer }) => {
               <div className="flex items-center gap-3 cursor-pointer p-2 hover:bg-gray-100 rounded-lg transition-colors">
                 <Avatar
                   size="large"
-                  src={adminProfile?.profile_picture}
+                  src={BASE_URL + adminProfile?.user?.profile_picture}
                   icon={<UserOutlined />}
                   className="border-2 border-gray-200 hover:border-orange-400 transition-colors"
                 />
                 <div className="hidden md:block ">
                   <div className="text-[#242424] text-[14px] font-semibold leading-tight">
-                    {adminProfile?.name}
+                    {adminProfile?.user?.full_name}
                   </div>
                   <div className="text-[12px] text-gray-500 leading-tight">
-                    {adminProfile?.role}
+                    {adminProfile?.user?.role == "SUPER_ADMIN"
+                      ? "Super Admin"
+                      : adminProfile?.user?.role}
                   </div>
                 </div>
                 <div className="hidden md:block">
